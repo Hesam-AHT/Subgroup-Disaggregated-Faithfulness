@@ -13,7 +13,7 @@ Disaggregated faithfulness evaluation for SHAP and LIME explanations — exposin
 [![Matplotlib](https://img.shields.io/badge/Matplotlib-3.x-11557c.svg)](https://matplotlib.org/)
 [![UCI Dataset](https://img.shields.io/badge/Dataset-UCI%20Adult%20Income-4b5563.svg)](https://archive.ics.uci.edu/dataset/2/adult)
 
-**XAI Fairness Research — June 2026**
+**XAI Fairness Research**
 
 Standard explainability metrics evaluate explanation quality by averaging scores across the entire dataset. The problem: that average can look acceptable globally while completely failing specific demographic groups — and nobody notices. This project quantifies exactly that failure by introducing three new **disaggregated faithfulness metrics** that break down explanation quality by subgroup (sex, race, age), revealing which groups are silently underserved by SHAP and LIME.
 
