@@ -547,7 +547,9 @@ Subgroup-Disaggregated-Faithfulness/
 
 **Amirhesam Torkashvand** — XAI metrics, SHAP explanations, LIME explanations
 
-**Teammate** — Data preprocessing and model training (Notebook 01)
+**Jacopo** — Data preprocessing and model training 
+
+**Stefano** — PGI, PGU, F_global computation and first plots
 
 ---
 
