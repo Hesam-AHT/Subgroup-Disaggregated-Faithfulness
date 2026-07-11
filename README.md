@@ -5,6 +5,7 @@ Disaggregated faithfulness evaluation for SHAP and LIME explanations — exposin
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776ab.svg)](https://www.python.org/)
 [![Google Colab](https://img.shields.io/badge/Runs%20on-Google%20Colab-F9AB00.svg)](https://colab.research.google.com/)
+[![Streamlit](https://img.shields.io/badge/Live%20Demo-Streamlit-ff4b4b.svg)](demo/README.md)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6%2B-f7931e.svg)](https://scikit-learn.org/)
 [![SHAP](https://img.shields.io/badge/SHAP-TreeExplainer-1c7c54.svg)](https://shap.readthedocs.io/)
 [![LIME](https://img.shields.io/badge/LIME-LimeTabular-ff6600.svg)](https://github.com/marcotcr/lime)
@@ -32,8 +33,9 @@ Standard explainability metrics evaluate explanation quality by averaging scores
 9. [Artifacts Produced](#9-artifacts-produced)
 10. [Installation & Setup](#10-installation--setup)
 11. [Running the Pipeline](#11-running-the-pipeline)
-12. [Project Structure](#12-project-structure)
-13. [References](#13-references)
+12. [Live Demo (Streamlit)](#12-live-demo-streamlit)
+13. [Project Structure](#13-project-structure)
+14. [References](#14-references)
 
 ---
 
@@ -501,7 +503,49 @@ for i in tqdm(range(20), desc='LIME explanations'):   # 20 instead of 500
 
 ---
 
-## 12. Project Structure
+## 12. Live Demo (Streamlit)
+
+A local, interactive companion to the notebooks: [`demo/`](demo/) reproduces the same 500-instance
+sample, SHAP/LIME attributions, and PGI/PGU/WSF/FD/EDI metrics outside Colab, and lets you explore
+them live in the browser instead of reading static notebook output.
+
+```bash
+pip install streamlit shap lime scikit-learn pandas numpy altair tqdm
+
+# one-time: compute SHAP + LIME attributions on the 500-instance sample
+python demo/precompute.py
+
+streamlit run demo/app.py
+```
+
+Opens at `http://localhost:8501`. The app has three tabs:
+
+1. **① Explain one person** — pick a test-set individual (or "Surprise me"), see their live SHAP
+   explanation, then run the masking test: masking the top-k "important" features crashes the
+   prediction while masking the bottom-k barely moves it — faithfulness (PGI/PGU) demonstrated on
+   one instance.
+2. **② The aggregation problem** — PGI/PGU shown globally (dashed line = what a standard
+   evaluation reports), then broken down by sex → race → age group, so subgroup bars visibly fall
+   away from the global line.
+3. **③ WSF · FD · EDI** — the three novel metrics from this project, computed live: which group is
+   worst-served (WSF), how wide the gap is (FD, flagged above the 0.1 concern threshold), who is
+   most abandoned relative to the global average (EDI), and a SHAP-vs-LIME equity verdict.
+
+A `k` slider in the sidebar re-runs the whole analysis for a different top-/bottom-k feature count.
+
+**Files**:
+
+| File | Purpose |
+|---|---|
+| [`demo/precompute.py`](demo/precompute.py) | Rebuilds the stratified 500-instance sample and saves `demo/artifacts/{sample_indices,shap_values,lime_values}.npy` |
+| [`demo/app.py`](demo/app.py) | The Streamlit app (reads `data/` + `demo/artifacts/`) |
+| [`demo/README.md`](demo/README.md) | Full run instructions and suggested walkthrough |
+
+See [`demo/README.md`](demo/README.md) for the detailed walkthrough.
+
+---
+
+## 13. Project Structure
 
 ```
 Subgroup-Disaggregated-Faithfulness/
@@ -523,13 +567,20 @@ Subgroup-Disaggregated-Faithfulness/
 │   ├── model_rf.pkl
 │   └── feature_names.pkl
 │
+├── demo/                               # Local Streamlit companion app
+│   ├── app.py                          # Interactive SHAP/LIME + WSF/FD/EDI explorer
+│   ├── precompute.py                   # Rebuilds the sample + attributions for the demo
+│   ├── artifacts/                      # sample_indices.npy, shap_values.npy, lime_values.npy
+│   └── README.md                       # Demo run instructions & walkthrough
+│
+├── explainers_report.docx              # Written project report
 ├── LICENSE
 └── README.md
 ```
 
 ---
 
-## 13. References
+## 14. References
 
 | Reference | Role in this project |
 |---|---|
